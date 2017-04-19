@@ -66,7 +66,11 @@ public class Words {
     public static List<String> withoutDefis(final List<String> dictionary) {
         List<String> ret = new ArrayList<>();
         //TODO выбрать из словаря те слова, которые не содержат символ дефиса. Добавить их в результирующий список ret
-
+for (int i=0; i<dictionary.size();i++)
+{
+    if (!dictionary.get(i).contains("-"))
+        ret.add(dictionary.get(i));
+}
 
         return ret;
     }
@@ -88,7 +92,13 @@ public class Words {
             @Override
             public int compare(String o1, String o2) {
                 //TODO реализовать функцию сравнения двух слов по длине
-                return 0;
+                if(o1.length() > o2.length()){
+                    return -1;
+                } else if (o1.length() < o2.length()) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
         };
     }
@@ -101,7 +111,8 @@ public class Words {
      */
     public static List<String> top(List<String> list) {
         //TODO реализовать возврат первых TOP_SIZE элементов списка
-        return Collections.emptyList();
+        list.sort(lengthComparator());
+        return list.subList(0, TOP_SIZE);
     }
 
 
@@ -130,11 +141,15 @@ public class Words {
      * @return истина в случае, если из букв большого можно составить маленькое слово. Иначе возвращает ложь.
      */
     public static boolean contains(Map<Character, Integer> big, Map<Character, Integer> small) {
-
         //TODO реализовать функцию, проверяющую, можно ли из большого слова составить маленькое слово
         //TODO для каждого ключа-буквы из маленького слова сравнить сколько раз встречается эта буква в большом слове
         //TODO в случае, если в большом слове эта буква встречается меньше, чем в маленьком, то маленькое слово нельзя составить из этого большого: возвращаем false
         //TODO если мы пробежали все буквы и не нашли проблем, то возвращаем true
+        for (Character key: small.keySet()) {
+            if (small.getOrDefault(key,0) > big.getOrDefault(key,0)) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -149,8 +164,9 @@ public class Words {
         //TODO реализовать теоретико-множественную разность
         //TODO ПОДСКАЗКА: по определению, слово должно ПРИНАДЛЕЖАТЬ list, но не ПРИНАДЛЕЖАТЬ sub.
         //TODO Воспользуйтесь методом contains класса List, чтобы проверить, что список содержит элемент
-
-        return Collections.emptyList();
+        ArrayList<String> rlist = new ArrayList<>();
+        for (String word: list) if (!sub.contains(word)) rlist.add(word);
+        return rlist;
     }
 
     /**
@@ -163,9 +179,9 @@ public class Words {
     public static int countWord(final int oldCount, final String userWord) {
         //Слово ДОМ длины 3. Ваш общий счет равен 25
         //длина слова
-        int wordLength = 0; //TODO
+        int wordLength = userWord.length(); //TODO
         //новый счет
-        int newCount = 0; //TODO
+        int newCount = wordLength+oldCount; //TODO
         System.out.printf("Слово %s длины %d. Ваш общий счет равен %d\n", userWord, wordLength, newCount);
         return newCount;
     }
